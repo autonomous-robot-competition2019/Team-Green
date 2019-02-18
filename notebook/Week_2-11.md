@@ -22,12 +22,8 @@ We edited the native "Blink" example code to achieve this.
 
 After this, we tested a positional actuator to get into the motions of using these actuators, as they will likely be useful in the near future. The code for this was lost, but it is a simple loop in which the motor switches between position 45 and 100 in 1 second intervals.
 
-After this, we decided that in order to make progress on the milestones, we needed a chassis. After a quick discussion, we decided on using LEGOs to make a quick chassis that is modular yet robust. Pictures below: (Pictures to come after we go into class again).
-
-(FRONT VIEW)
-
-(SIDE VIEW)
-
-(BACK VIEW)
+After this, we decided that in order to make progress on the milestones, we needed a chassis. After a quick discussion, we decided on using LEGOs to make a quick chassis that is modular yet robust.
 
 With this chassis, we plan to get the first three milestones done on 2-18-2019.
+
+Thomas and Michael focused on building the LEGO chassis while John and Travers focused on getting the code right.
