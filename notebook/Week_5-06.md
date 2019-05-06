@@ -1,0 +1,3 @@
+This past week we focused on building our competition-ready robot. John and Thomas continued to work on designing and printing parts for the final model. At this point we are implementing subtle tweeks to our design to get our **ball shooter** to work. We have printed our several iterations of the tube, though we are finding that the second iteration is working best currently. The shooter works, though not with enough consistentcy for us to be comfortable with our design. See the video in the folder for reference.
+
+Additionally Travers has been working on building a backup robot in case our more ambitious design does not function fully by the time of the competition. 
