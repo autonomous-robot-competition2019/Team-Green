@@ -26,19 +26,22 @@ void setup() {
 
 void loop() {
 
-  int obstacle = analogRead(ir_sensor);
+  int irVal = analogRead(ir_sensor);
     
   // Act according to gameState
   switch(gameState) {
-    
+
+    // Searching for quaffles and picking them up
     case mSearch:
       int dir = findClosestQuaffle();
       quaffleSearch(dir);
       break;
-      
+
+    // Finding goal so we can shoot
     case mFindGoal:
       break;
-      
+
+    // Shooting  
     case mShooting:
        // If we are just starting to shoot, start timer  
       if (!isShooting) {
@@ -57,8 +60,8 @@ void loop() {
         spinUp(225);
         spinner.write(120);
       }
-
-      
+    
+    // Figuring out whoch side we are on at the beginning 
     case mFindSide:
       // Rotate to the side then move forwards
       drive(90,95); // turn left
@@ -71,8 +74,17 @@ void loop() {
       delay(2000);
 
       drive(95,95); // go straight
-      
+
+    // Avoid collision
     case mAvoidColl:
+      drive (85,85);
+      delay(1000);
+      
+      while (irVal > threshold) {
+          irVal = analogRead(ir_sensor);
+          drive(90,95);
+      }
+      gameState = previousState;
       break;
   }
 }

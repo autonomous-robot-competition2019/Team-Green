@@ -44,6 +44,7 @@ int gameState;
 int curSide;
 int target_color;
 int isShooting = 0;
+int previousState;
 unsigned long start;
 
 // Objects 
