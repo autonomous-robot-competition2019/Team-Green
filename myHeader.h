@@ -43,6 +43,8 @@ const int RIGHT = 3;
 int gameState; 
 int curSide;
 int target_color;
+int isShooting = 0;
+unsigned long start;
 
 // Objects 
 // =======
