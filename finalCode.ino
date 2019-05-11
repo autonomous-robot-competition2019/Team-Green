@@ -13,9 +13,30 @@ void setup() {
   rightWheel.attach(right_motor);
   spinner.attach(spin);
   stopper.attach(stop);
-  
+
+  // Set game state to findSide
+  gameState = mFindSide;
+
+  // Pixy
+  pixy.init();
+
+  // Look for Quaffles
+  target_color = 3;
 }
 
 void loop() {
-  spinUp(200);
+
+  // Act according to gameState
+  switch(gameState) {
+    case mSearch:
+      break;
+    case mFindGoal:
+      break;
+    case mShooting:
+      break;
+    case mFindSide:
+      break;
+    case mAvoidColl:
+      break;
+  }
 }

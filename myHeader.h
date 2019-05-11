@@ -6,18 +6,43 @@
 // =========
 
 // Servos
-extern const int left_motor = 4;
-extern const int right_motor = 5;
-extern const int spin = 6; 
-extern const int stop = 7;
+const int left_motor = 4;
+const int right_motor = 5;
+const int spin = 6; 
+const int stop = 7;
 
-extern const int target_color = 3; // green
-extern const int left = 0;
-extern const int right = 180;
+const int GREEN_COLOR = 3; // green
+const int ORANGE_COLOR = 5; // orange
+const int left = 0;
+const int right = 180;
 
 // IR
-extern const int ir_sensor = A1;
-extern const int threshold = 300;
+const int ir_sensor = A1;
+const int threshold = 300;
+
+// State Logic
+const int mSearch = 0; 
+const int mFindGoal = 1;
+const int mShooting = 2; 
+const int mFindSide = 4;
+const int mAvoidColl = 5;
+
+
+// Side
+const int RED_SIDE = 0;
+const int BLUE_SIDE = 1; 
+
+// Directions
+const int NONE = 0;
+const int LEFT = 1;
+const int CENTER = 2;
+const int RIGHT = 3;
+
+
+// Variables
+int gameState; 
+int curSide;
+int target_color;
 
 // Objects 
 // =======
@@ -37,3 +62,44 @@ void spinUp(int speed) {
   digitalWrite(9,LOW);
   analogWrite(3,speed);		
 }
+
+// return 0 -no quaffle, 1 - closest to left, 2 - closest ahead, 3 - closest to right
+int findClosestQuaffle() {
+	int minY = 1000;
+	int direction = NONE;
+	int num_quafs = pixy.getBlocks();
+  	for (int i = 0; i < num_quafs; i++) {
+    	if (pixy.blocks[i].signature == target_color){
+    		if (pixy.blocks[i].y < minY) {
+    			minY = pixy.blocks[i].y;
+    			if (pixy.blocks[i].x < 152) direction = LEFT;
+    			else if (pixy.blocks[i].y > 168)  direction = RIGHT;
+    			else direction = CENTER;
+    		}    
+    	} 
+
+  	}
+
+  	return direction;
+}
+
+void quaffleSearch(int direction) {
+	switch(direction) {
+
+		case NONE:
+			drive(90,95);
+			break;
+
+		case LEFT:
+			drive(90,95);
+			break;
+
+		case RIGHT:
+			drive(95,90);
+			break;
+
+		case CENTER:
+			drive (100,100);
+			break;
+	}
+} 
