@@ -13,14 +13,12 @@ const int stop = 7;
 
 const int GREEN_COLOR = 3; // green
 const int ORANGE_COLOR = 5; // orange
-const int left = 0;
-const int right = 180;
 
 // IR
 const int ir_sensor = A1;
-const int threshold = 300;
+const int threshold = 300;//Need to adjust this 
 
-// State Logic
+// State Logic, m=mode
 const int mSearch = 0; 
 const int mFindGoal = 1;
 const int mShooting = 2; 
