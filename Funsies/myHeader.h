@@ -8,9 +8,6 @@
 // =========
 
 
-const int CLOSE =  10;
-const int OPEN  = 40;
-
 // Servos
 const int left_motor = 4;
 const int right_motor = 5;
@@ -21,12 +18,12 @@ const int GREEN_COLOR = 3; // green
 const int ORANGE_COLOR = 5; // orange
 const int RED_COLOR = 6;
 const int BLUE_COLOR = 7;
-const int YELLOW_COLOR = 1;
+const int YELLOW_COLOR = 8;
 
 // IR
 const int ir_sensor_center = A8;
-const int ir_sensor_right = A9;
-const int ir_sensor_left = A10;
+const int ir_sensor_left = A9;
+const int ir_sensor_right = A10;
 const int threshold = 530;//Need to adjust this 
 
 // State Logic, m=mode
@@ -71,7 +68,7 @@ for (int i=0; i<256; i++) {
 int startSide;
 int gameState; 
 int curSide;
-int target_color = GREEN_COLOR;
+int target_color = 3;
 int pos = 0;    // variable to store the servo position
 int previousState;
 unsigned long curTime;
@@ -101,6 +98,52 @@ void spinUp(int speed) {
   analogWrite(3,speed);		
 }
 
+// return 0 -no quaffle, 1 - closest to left, 2 - closest ahead, 3 - closest to right
+int findClosestQuaffle() {
+	int minY = 1000;
+	int direction = NONE;
+	int num_quafs = pixy.getBlocks();
+  	for (int i = 0; i < num_quafs; i++) {
+    	if (pixy.blocks[i].signature == target_color){
+    		if (pixy.blocks[i].y < minY) {
+    			minY = pixy.blocks[i].y;
+    			//Serial.println(minY);
+    			if (pixy.blocks[i].x < 125) direction = LEFT;
+    			else if (pixy.blocks[i].y > 145)  direction = RIGHT;
+    			else if (pixy.blocks[i].y < 25) direction = FRONT;
+    			else direction = CENTER;
+    		}    
+    	} 
+
+  	}
+  	Serial.println(direction);
+  	return direction;
+}
+
+void quaffleSearch(int direction) {
+	switch(direction) {
+
+		case NONE:
+			drive(90,100);
+			break;
+
+		case LEFT:
+			drive(90,100);
+			break;
+
+		case RIGHT:
+			drive(100,90);
+			break;
+
+		case CENTER:
+			drive (140,140);
+			delay(1500);
+			break;
+		case FRONT:
+			drive(120,120);
+			break;
+	}
+}
 int returnColor(float red,float green, float blue)
 {
 	if (red > 150 && green < 60 && blue < 60) return RED_COLOR;
@@ -109,63 +152,43 @@ int returnColor(float red,float green, float blue)
 	else return 0;
 }
 
-
-void collisionCheck(float red,float green,float blue)
-{
-	if (analogRead(ir_sensor_center) > 450 && gameState != SHOOTING) {
-	Serial.println("XXX");
-    drive(20,40);
-    delay(1500);
-    drive(75,180);
-    delay(1000);
-  } else if (analogRead(ir_sensor_left) > 400 && gameState != SHOOTING) {
-    drive(75,75);
-    delay(1500);
-    drive(120,90);
-    delay(1000);
-    Serial.println("XXX");
-  } else if (analogRead(ir_sensor_right) > 400 && gameState != SHOOTING) {
-    drive(40,20);
-    delay(1500);
-    drive(180,70);
-    delay(1000);
-    Serial.println("XXX");
-  } else if ((analogRead(ir_sensor_right) > 300 && gameState != SHOOTING && analogRead(ir_sensor_center) > 300) || 
-  (analogRead(ir_sensor_left) > 300 && gameState != SHOOTING && analogRead(ir_sensor_center) > 300) ) {
-    drive(30,30);
-    delay(1500);
-    drive(90,120);
-    delay(1000);
-    Serial.println("XXX");
-  } 
-}
-
-// return 0 -no quaffle, 1 - closest to left, 2 - closest ahead, 3 - closest to right
-int findClosestQuaffle() {
-	int minY = 1000;
+int isRedOrBlue() {
 	int direction = NONE;
 	int num_quafs = pixy.getBlocks();
-  	for (int i = 0; i < num_quafs; i++) {
-    	if (pixy.blocks[i].signature == GREEN_COLOR){
-    		Serial.println("IINNNN");
-    		if (pixy.blocks[i].y < minY) {
-    			minY = pixy.blocks[i].y;
-    			//Serial.println(minY);
-    			if (pixy.blocks[i].x < 190) direction = LEFT;
-    			else if (pixy.blocks[i].x > 210)  direction = RIGHT;
-    			else if (pixy.blocks[i].y < 20) direction = FRONT;
-    			else direction = CENTER;
-    		}    
+	for (int i = 0; i < num_quafs; i++) {
+    	if (pixy.blocks[i].signature == RED_COLOR || pixy.blocks[i].signature == BLUE_COLOR){
+			if (pixy.blocks[i].x < 125) direction = LEFT;
+    		else if (pixy.blocks[i].y > 145)  direction = RIGHT;
+    		else if (pixy.blocks[i].y < 25) direction = FRONT;
+    		else direction = CENTER;  		   
     	} 
 
   	}
-  	// Serial.println(direction);
   	return direction;
 }
 
-void quaffleSearch() {
-	drive(150,150);
+void middleSearch(int direction) {
+	switch(direction) {
+
+		case NONE:
+			drive(90,100);
+			break;
+
+		case LEFT:
+			drive(90,100);
+			break;
+
+		case RIGHT:
+			drive(100,90);
+			break;
+
+		case CENTER:
+			drive (140,140);
+			delay(1500);
+			break;
+
+		case FRONT:
+			drive(120,120);
+			break;
+	}
 }
-
-
-
